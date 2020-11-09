@@ -37,7 +37,6 @@ func TestSaveFailedWithCorruptDbError(t *testing.T) {
 
 }
 
-
 func TestFetchSuccess(t *testing.T) {
 
 	p := &Product{Id: "123", Product: "product 123", Price: "£12"}
