@@ -73,7 +73,7 @@ func (ch *CartHandler) Query(w http.ResponseWriter, r *http.Request) {
 	Respond(w, http.StatusOK, p)
 }
 
-// Delete handler retrives the Product based on the id passed
+// Delete handler deletes the Product based on the id passed
 func (ch *CartHandler) Delete(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
