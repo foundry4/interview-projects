@@ -13,7 +13,7 @@ func (app *App) routeRequests() {
 	app.Router.HandleFunc("/products", ph.Query).Methods(http.MethodGet)
 
 
-	cart := NewMapDb(make(map[string]*Product))
+	cart := NewDB(make(map[string]*Product))
 	cs := NewProductService(cart)
 	ch := NewCartHandler(cs)
 	// for basket/cart use
@@ -22,7 +22,7 @@ func (app *App) routeRequests() {
 	app.Router.HandleFunc("/cart", ch.Query).Methods(http.MethodGet)
 	app.Router.HandleFunc("/cart/{id}", ch.Query).Methods(http.MethodDelete)
 	
-	// for cart checkout (not exactly CRUD)
+	// for checkout
 	app.Router.HandleFunc("/checkout/{id}", ch.Checkout).Methods(http.MethodDelete)
 
 }

@@ -13,13 +13,13 @@ const dataDumpFile = "shopping/data/dump/prod/products.json"
 // App encapsulates two main components
 // viz. router and db
 type App struct {
-	Router *mux.Router
-	Inventory     *MapDb
+	Router    *mux.Router
+	Inventory *DB
 }
 
 // NewApp craetes a new App instance each time the application is restarted
-// Note: the Mapdb instance is epehmeral and dies with the app shutdown
-func NewApp(db *MapDb) *App {
+// Note: the DB instance is epehmeral and dies with the app shutdown
+func NewApp(db *DB) *App {
 	return &App{
 		Inventory: db,
 	}
@@ -31,7 +31,7 @@ func (app *App) Init() {
 
 	pm := make(map[string]*Product)
 
-	inv := NewMapDb(pm)
+	inv := NewDB(pm)
 
 	pa := NewApp(inv)
 
