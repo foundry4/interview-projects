@@ -7,7 +7,7 @@ import (
 )
 
 // Load must fill the Db with the data from the file path provided
-func Load(path string, db *MapDb) (*MapDb, error) {
+func Load(path string, db *DB) (*DB, error) {
 
 	file, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -21,7 +21,7 @@ func Load(path string, db *MapDb) (*MapDb, error) {
 		return nil, fmt.Errorf("error unmarshalling json: %v", err)
 	}
 
-	m, ok := db.mp.(map[string]*Product)
+	m, ok := db.Type.(map[string]*Product)
 	if !ok {
 		return nil, fmt.Errorf("error corrupt data type")
 	}

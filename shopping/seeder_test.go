@@ -6,7 +6,7 @@ import (
 )
 
 var db = make(map[string]*Product)
-var mapDb = NewMapDb(db)
+var mapDb = NewDB(db)
 
 var filePath = "data/dump/test/"
 
@@ -18,7 +18,7 @@ func Test_Populate_Valid_File(t *testing.T) {
 	m["1"] = &Product{Id: "1", Product: "abc", Price: "£1.00"}
 	m["2"] = &Product{Id: "2", Product: "def", Price: "£2.00"}
 
-	want := NewMapDb(m)
+	want := NewDB(m)
 
 	got, err := Load(file, mapDb)
 	if err != nil {
@@ -29,7 +29,7 @@ func Test_Populate_Valid_File(t *testing.T) {
 		t.Fatalf("expected: %+v,  got: %+v", want, got)
 	}
 
-}	
+}
 
 func Test_Populate_File_Not_Found(t *testing.T) {
 

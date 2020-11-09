@@ -6,7 +6,7 @@ import "fmt"
 // N.B. datatype of contents might differ for inventory and cart
 // but for the sake of simplicity, they are assume dto be the same
 type ProductService struct {
-	Db *MapDb
+	Db *DB
 }
 
 //Product model for capturing data to be stored
@@ -17,7 +17,7 @@ type Product struct {
 }
 
 // NewProductService creates  anew ProductService used for Product CRUD on db
-func NewProductService(inv *MapDb) *ProductService {
+func NewProductService(inv *DB) *ProductService {
 	return &ProductService{
 		Db: inv,
 	}
@@ -34,10 +34,10 @@ func ErrorNoDataFound(id, action string) error {
 
 // Save adds a new Product into the db
 func (ps *ProductService) Save(p *Product) (*Product, error) {
-	ps.Db.mu.RLock()
-	defer ps.Db.mu.RUnlock()
+	ps.Db.Mu.RLock()
+	defer ps.Db.Mu.RUnlock()
 
-	m, ok := ps.Db.mp.(map[string]*Product)
+	m, ok := ps.Db.Type.(map[string]*Product)
 	if !ok {
 		return nil, ErrorCorruptDb
 	}
@@ -49,10 +49,10 @@ func (ps *ProductService) Save(p *Product) (*Product, error) {
 
 // Fetch can find an existing product by id present in the db
 func (ps *ProductService) Fetch(id string) (*Product, error) {
-	ps.Db.mu.RLock()
-	defer ps.Db.mu.RUnlock()
+	ps.Db.Mu.RLock()
+	defer ps.Db.Mu.RUnlock()
 
-	m, ok := ps.Db.mp.(map[string]*Product)
+	m, ok := ps.Db.Type.(map[string]*Product)
 	if !ok {
 		return nil, ErrorCorruptDb
 	}
@@ -67,10 +67,10 @@ func (ps *ProductService) Fetch(id string) (*Product, error) {
 
 // FetchAll can find all existing products present in the db
 func (ps *ProductService) FetchAll() ([]*Product, error) {
-	ps.Db.mu.RLock()
-	defer ps.Db.mu.RUnlock()
+	ps.Db.Mu.RLock()
+	defer ps.Db.Mu.RUnlock()
 
-	m, ok := ps.Db.mp.(map[string]*Product)
+	m, ok := ps.Db.Type.(map[string]*Product)
 	if !ok {
 		return nil, ErrorCorruptDb
 	}
@@ -86,10 +86,10 @@ func (ps *ProductService) FetchAll() ([]*Product, error) {
 
 // Delete can find all existing products present in the db
 func (ps *ProductService) Delete(id string) error {
-	ps.Db.mu.RLock()
-	defer ps.Db.mu.RUnlock()
+	ps.Db.Mu.RLock()
+	defer ps.Db.Mu.RUnlock()
 
-	m, ok := ps.Db.mp.(map[string]*Product)
+	m, ok := ps.Db.Type.(map[string]*Product)
 	if !ok {
 		return ErrorCorruptDb
 	}

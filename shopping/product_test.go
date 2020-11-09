@@ -10,7 +10,7 @@ import (
 func TestSaveSuccess(t *testing.T) {
 
 	p := &Product{Id: "123", Product: "product 123", Price: "£12"}
-	ps := testProductService(make(map[string]*Product))
+	ps := createProductServiceSUT(make(map[string]*Product))
 
 	got, err := ps.Save(p)
 	if err != nil {
@@ -28,7 +28,7 @@ func TestSaveFailedWithCorruptDbError(t *testing.T) {
 	m := make(map[string]string)
 	m["abc"] = "def"
 
-	ps := testProductService(m)
+	ps := createProductServiceSUT(m)
 
 	_, err := ps.Save(p)
 	if !errors.Is(err, ErrorCorruptDb) {
@@ -40,9 +40,9 @@ func TestSaveFailedWithCorruptDbError(t *testing.T) {
 func TestFetchSuccess(t *testing.T) {
 
 	p := &Product{Id: "123", Product: "product 123", Price: "£12"}
-	ps := testProductService(make(map[string]*Product))
+	ps := createProductServiceSUT(make(map[string]*Product))
 
-	ps.Db.mp.(map[string]*Product)["123"] = p
+	ps.Db.Type.(map[string]*Product)["123"] = p
 
 	got, err := ps.Fetch("123")
 	if err != nil {
@@ -57,9 +57,9 @@ func TestFetchSuccess(t *testing.T) {
 func TestFetchFailedNotFound(t *testing.T) {
 
 	p := &Product{Id: "123", Product: "product 123", Price: "£12"}
-	ps := testProductService(make(map[string]*Product))
+	ps := createProductServiceSUT(make(map[string]*Product))
 
-	ps.Db.mp.(map[string]*Product)["123"] = p
+	ps.Db.Type.(map[string]*Product)["123"] = p
 
 	_, err := ps.Fetch("456")
 	if err == nil {
@@ -71,15 +71,15 @@ func TestFetchFailedNotFound(t *testing.T) {
 func TestFetchAllSuccess(t *testing.T) {
 
 	p := []*Product{
-			&Product{Id: "123",
-					Product: "product 123",
-					Price: "£12"},
+		&Product{Id: "123",
+			Product: "product 123",
+			Price:   "£12"},
 	}
-	ps := testProductService(make(map[string]*Product))
+	ps := createProductServiceSUT(make(map[string]*Product))
 
-	ps.Db.mp.(map[string]*Product)["123"] = &Product{Id: "123",
+	ps.Db.Type.(map[string]*Product)["123"] = &Product{Id: "123",
 		Product: "product 123",
-		Price: "£12"}
+		Price:   "£12"}
 
 	got, err := ps.FetchAll()
 	if err != nil {
@@ -93,8 +93,7 @@ func TestFetchAllSuccess(t *testing.T) {
 
 func TestFetchAllFailedCorruptDb(t *testing.T) {
 
-	
-	ps := testProductService(make(map[string]string))
+	ps := createProductServiceSUT(make(map[string]string))
 
 	_, err := ps.FetchAll()
 	if !errors.Is(err, ErrorCorruptDb) {
@@ -103,13 +102,12 @@ func TestFetchAllFailedCorruptDb(t *testing.T) {
 
 }
 
-
 func TestDeleteSuccess(t *testing.T) {
 
 	p := &Product{Id: "123", Product: "product 123", Price: "£12"}
-	ps := testProductService(make(map[string]*Product))
+	ps := createProductServiceSUT(make(map[string]*Product))
 
-	ps.Db.mp.(map[string]*Product)["123"] = p
+	ps.Db.Type.(map[string]*Product)["123"] = p
 
 	err := ps.Delete("123")
 	if err != nil {
@@ -121,9 +119,9 @@ func TestDeleteSuccess(t *testing.T) {
 func TestDeleteFailedNotFound(t *testing.T) {
 
 	p := &Product{Id: "123", Product: "product 123", Price: "£12"}
-	ps := testProductService(make(map[string]*Product))
+	ps := createProductServiceSUT(make(map[string]*Product))
 
-	ps.Db.mp.(map[string]*Product)["123"] = p
+	ps.Db.Type.(map[string]*Product)["123"] = p
 
 	err := ps.Delete("456")
 	if err == nil {
@@ -132,6 +130,6 @@ func TestDeleteFailedNotFound(t *testing.T) {
 
 }
 
-func testProductService(m interface{}) *ProductService{
-	return NewProductService(NewMapDb(m))
+func createProductServiceSUT(m interface{}) *ProductService {
+	return NewProductService(NewDB(m))
 }
