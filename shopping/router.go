@@ -10,7 +10,9 @@ func (app *App) routeRequests() {
 	ph := NewProductHandler(ps)
 	// for inventory use
 	app.Router.HandleFunc("/products/{id}", ph.QueryByID).Methods(http.MethodGet)
+	app.Router.HandleFunc("/products/{id}", ph.Delete).Methods(http.MethodDelete)
 	app.Router.HandleFunc("/products", ph.Query).Methods(http.MethodGet)
+	app.Router.HandleFunc("/products", ph.Create).Methods(http.MethodPost)
 
 
 	cart := NewDB(make(map[string]*Product))

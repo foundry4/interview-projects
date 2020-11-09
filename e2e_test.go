@@ -169,6 +169,7 @@ func Test_Add_Item_To_Basket(t *testing.T) {
 
 }
 
+
 func Test_Remove_Item_From_Basket(t *testing.T) {
 
 	Convey("Given I have added several products to the basket", t, func() {
