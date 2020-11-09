@@ -1,0 +1,11 @@
+[{
+    "id": "1",
+    "product": "abc",
+    "price": "£1.00"
+},
+{
+    "id": "2",
+    "product": "def",
+    "price": "£2.00"
+}
+]
