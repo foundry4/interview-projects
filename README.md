@@ -71,12 +71,12 @@ DELETE /checkout/{id}   //checkout product from cart by id
 ```
 
 ### some decisions taken:
-- Golang maps has been used though I have tried to write a generic DB implemenation where the type can be swapped. Golang maps are good candidate for this sort of operations due it's O(1) constant time access for lookup so the performance is better, along with RW mutex to avoid race conditions.
-For production, MongoDB/Postgres could be used, depending upon complexity
+- Golang maps has been used as the data store, though I have tried to write a generic DB specififaction (using interface) where the type can be swapped. Golang maps are good candidate for this sort of operations due it's O(1) constant time access for lookup, hence the performance is better, along with RW mutex to avoid race conditions.
+For production, MongoDB/Postgres could be used, depending upon complexity and use cases.
 - Code  comments used where needed.
-- Standard routes -> handler -> services flow used
-- Pragmatic test are added as needed
-- While writing `E2E tests` using Go Convey, certain operations are avoided to preserve readability for e2e tests. They should be used by the consumer accordingly where use of goroutines and channels are recommended, if using Golang or Furture/Promise for async operations in Java/Scala/JS consumers. Please see as below:
+- Standard routes -> handler -> services flow used.
+- Pragmatic test are added as needed.
+- While writing `E2E tests` using Go Convey, certain operations are avoided to preserve readability for e2e tests. They should be used by the consumer accordingly where use of goroutines and channels are recommended, if using Golang or Future/Promise for async operations in Java/Scala/JS consumers. Please see as below:
 
     Scenario: Remove items from basket
 	When products are chosen and added to cart, ideally they should be removed from inventory
@@ -92,7 +92,9 @@ For production, MongoDB/Postgres could be used, depending upon complexity
     
 ** similar decisions have been taken for addition to cart, checkout etc. It's quite easy to put them back but makes it complex to read.
 
-- The code is a MVP version and can be refactored in future.
+- SOLID principles have been followed while development.
+
+- The code is a MVP version and can be refactored/extended in future.
 
 
 ### answering additional requirements
@@ -105,7 +107,7 @@ might you build this?
     
     At code level, concurrency using goroutine and channels will help. The consumer must choose to call the APIs asynchronously. Also, splitting into multiple microservices and using one database per microservice also helps.
 
-    At infrastrucure level, horizontal pod autoscaling (HPA) when apps are deployed on K8s cluster helps in scalability. Also, a load balancer like Traefik and even Nginx helps. Services meshes are sometimes very helpful for traffic management!
+    At infrastrucure level, Horizontal Pod Autoscaling (HPA) when apps are deployed on K8s cluster helps in scalability (by limiting CPU usage for containers). Also, a load balancer like Traefik and even Nginx helps. Services meshes are sometimes very helpful for traffic management!
 
 2. Imagine you wanted to collect real time dashboards of how many people are viewing any product at various points in time, how might you do this?
 
