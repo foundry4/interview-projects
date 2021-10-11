@@ -1,6 +1,6 @@
 # Foundry4 Interview Test 1
 
-The JSON file in the repository has a list of products, with names and prices.
+There are several JSON files in this repository.  The relevant JSON file will be given in the problem statement.
 The task will be to implement the requirements in the given github issues.
 
 The solution should be implemented by forking this repository, after which you are free to do as you like with the files contained in it.
